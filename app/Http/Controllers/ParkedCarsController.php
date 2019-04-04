@@ -8,6 +8,7 @@ use App\ParkedCars;
 use App\TicketNumber;
 use App\TicketAmount;
 use App\ResponseMessages;
+use Validator;
 
 class ParkedCarsController extends Controller
 {
@@ -22,23 +23,25 @@ class ParkedCarsController extends Controller
             $newParking->car_status = 'parked';
             $newParking->ticket_number = $newTicketNumber;
             $newParking->ticket_created_at = time();
-            $newParking->ticket_created_at = time();
             $newParking->paid_amount = 0;
-            $newParking->paid_credit_card = 0;
     
             $newParking->save();
     
             if (!empty($newParking->ticket_number)) {
                 return response()->json(
-                    array('ticket_number' => $newParking->ticket_number),
-                    array('available_space' => 6 - ParkedCars::where('car_status', '=', 'parked')->count())
-                    + $responseMessages->success
+                    array('ticket_number' => $newParking->ticket_number) +
+                    array('available_space' => 6 - ParkedCars::where('car_status', '=', 'parked')->count()) +
+                    $responseMessages->success
                 );
             } else {
-                return response()->json($responseMessages->tech_error);
+                return response()->json(
+                    $responseMessages->tech_error
+                );
             }
         } else {
-            return response()->json($responseMessages->no_space);
+            return response()->json(
+                $responseMessages->no_space
+            );
         }
     }
     
@@ -49,7 +52,46 @@ class ParkedCarsController extends Controller
         $thisTicket = ParkedCars::where('ticket_number', '=', intval($ticket_number));
         if($thisTicket->exists()){
             $thisTicket = $thisTicket->first();
-            return response()->json(TicketAmount::countAmount($thisTicket->ticket_created_at, time()) + $responseMessages->success);
+            return response()->json(
+                [ "car_status" => $thisTicket->car_status ] +
+                TicketAmount::countAmount($thisTicket->ticket_created_at, 
+                    $thisTicket->car_status == "paid" ? 
+                        $thisTicket->paid_at :
+                        time() 
+                ) + $responseMessages->success
+            );
+        } else {
+            return response()->json(
+                $responseMessages->no_ticket
+            );
+        }
+    }
+
+    /// GET/payments/{ticket_number}
+
+    public function payForTicket($ticket_number, Request $request){
+
+        $validator = Validator::make($request->all(), [
+            "credit_card" => "required|min:16|max:16",
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                "status" => 400,
+                "error" => $validator->errors(),
+            ], 400);
+        }
+        $responseMessages = ResponseMessages::payForTicket();
+        $thisTicket = ParkedCars::where('ticket_number', intval($ticket_number));
+        if($thisTicket->exists()){
+            if($thisTicket->first()->car_status != 'paid'){
+                $thisTicket->update([
+                    "car_status" => 'paid',
+                    "paid_amount" => TicketAmount::countAmount($thisTicket->first()->ticket_created_at, time())['total_amount_owe'],
+                    "paid_credit_card" => $request->credit_card,
+                    "paid_at" => time(),
+                ]);
+            }
+            return response()->json($responseMessages->success);
         } else {
             return response()->json($responseMessages->no_ticket);
         }
