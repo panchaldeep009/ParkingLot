@@ -18,7 +18,7 @@ class TicketAmount {
         $total_amount_owe = ceil($hours)*$price_per_hour;
         $multiplier = 0;
         
-        while($hours > floor(3 * (2 ^ ($multiplier - 1)))){
+        while($hours > floor(3 * (2 ** ($multiplier - 1)))){
             $total_amount_owe += ceil($hours) * $additional_price_per_hour;
             $multiplier++;
         }
@@ -32,7 +32,8 @@ class TicketAmount {
             'total_amount_owe' => $total_amount_owe,
             'message' => "Your have Parked for "
                             .ceil($hours)
-                            ." Hours"
+                            ." Hours",
+            'additional_amount_chared_per_hour' => ($multiplier) * $additional_price_per_hour,
         );
     }
 }
