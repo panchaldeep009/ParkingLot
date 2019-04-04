@@ -6,10 +6,12 @@ use Illuminate\Http\Request;
 
 use App\ParkedCars;
 use App\TicketNumber;
+use App\TicketAmount;
 use App\ResponseMessages;
 
 class ParkedCarsController extends Controller
 {
+    /// (GET|POST)/tickets
     public function getTicket(){
         $responseMessages = ResponseMessages::getTicket();
         if(ParkedCars::where('car_status', '=', 'parked')->count() < 6){
@@ -37,6 +39,19 @@ class ParkedCarsController extends Controller
             }
         } else {
             return response()->json($responseMessages->no_space);
+        }
+    }
+    
+    /// GET/tickets/{ticket_number}
+
+    public function checkoutTicket($ticket_number){
+        $responseMessages = ResponseMessages::checkoutTicket();
+        $thisTicket = ParkedCars::where('ticket_number', '=', intval($ticket_number));
+        if($thisTicket->exists()){
+            $thisTicket = $thisTicket->first();
+            return response()->json(TicketAmount::countAmount($thisTicket->ticket_created_at, time()) + $responseMessages->success);
+        } else {
+            return response()->json($responseMessages->no_ticket);
         }
     }
 }

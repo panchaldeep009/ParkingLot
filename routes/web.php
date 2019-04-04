@@ -19,3 +19,5 @@ Route::get('/', function () {
 
 Route::get('/tickets', 'ParkedCarsController@getTicket');
 Route::post('/tickets', 'ParkedCarsController@getTicket');
+
+Route::get('/tickets/{ticket_number}', 'ParkedCarsController@checkoutTicket');

@@ -19,4 +19,17 @@ class ResponseMessages {
             ),
         );
     }
+
+    public static function checkoutTicket () {
+        return (object) array(
+            'success' => array(
+                'status' => 200, 
+                'message' => "Ticket Number Found"
+            ),
+            'no_ticket' => array(
+                'status' => 404,
+                'message' => "Ticket Number Not Found"
+            ),
+        );
+    }
 }
