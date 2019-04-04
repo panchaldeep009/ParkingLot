@@ -14,8 +14,3 @@
 Route::get('/', function () {
     return view('welcome');
 });
-
-// API Routes
-
-Route::get('/tickets', 'ParkedCarsController@getTicket');
-Route::post('/tickets', 'ParkedCarsController@getTicket');

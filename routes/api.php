@@ -15,3 +15,6 @@ use Illuminate\Http\Request;
 
 Route::get('/tickets', 'ParkedCarsController@getTicket');
 Route::post('/tickets', 'ParkedCarsController@getTicket');
+
+Route::get('/tickets/{ticket_number}', 'ParkedCarsController@checkoutTicket');
+Route::post('/payments/{ticket_number}', 'ParkedCarsController@payForTicket');
