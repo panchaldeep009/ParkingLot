@@ -75,6 +75,9 @@ Help() {
     printf "${BLUE}      -w ${WHITE} : ${YELLOW} To keep Front-end Bundling \n"
     printf "${BLUE}      --build ${WHITE} : ${YELLOW} To build Front-end production Version \n"
     printf "${BLUE}      -p ${WHITE} : ${YELLOW} To build Front-end production Version \n"
+    printf "${BLUE}      --test <source_file> ${WHITE} : ${YELLOW} To PHP Unit Test \n"
+    printf "${BLUE}      --test-api ${WHITE} : ${YELLOW} To Run PHP Unit Test for API \n"
+    printf "${BLUE}      --test-fn ${WHITE} : ${YELLOW} To Run PHP Unit Test for Functions \n"
     printf "\n"
     printf "${BLUE}      -h ${WHITE} : ${YELLOW} To Discover Command Options \n"
     printf "${BLUE}      --help ${WHITE} : ${YELLOW} To Discover Command Options \n"
@@ -165,6 +168,22 @@ elif test "$1" = "--build"; then
 elif test "$1" = "-p"; then
     printf "${YELLOW} :: Building Front-end App :: \n\n"
     npm run prod >&- 2>&- 
+    printf "${GREEN} :: DONE :: \n\n"
+elif test "$1" = "--test"; then
+    printf "${YELLOW} :: Running test for $2 :: \n\n"
+    vendor/bin/phpunit $2
+    printf "${GREEN} :: DONE :: \n\n"
+elif test "$1" = "--test"; then
+    printf "${YELLOW} :: Running test for $2 :: \n\n ${WHITE}"
+    vendor/bin/phpunit $2
+    printf "${GREEN} :: DONE :: \n\n"
+elif test "$1" = "--test-api"; then
+    printf "${YELLOW} :: Running test for APIs :: \n\n ${WHITE}"
+    vendor/bin/phpunit tests/Unit/APITest.php
+    printf "${GREEN} :: DONE :: \n\n"
+elif test "$1" = "--test-fn"; then
+    printf "${YELLOW} :: Running test for Functions :: \n\n ${WHITE}"
+    vendor/bin/phpunit tests/Unit/FunctionsTest.php
     printf "${GREEN} :: DONE :: \n\n"
 else
     Intro
