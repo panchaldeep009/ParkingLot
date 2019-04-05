@@ -128,7 +128,8 @@ MySQL() {
     fi
     eval "sed -i 's/DB_PASSWORD=\(.*\)/DB_PASSWORD=$value/g' .env"
 
-    printf "\n ${YELLOW} :: DATABASE Config Successfully ::"
+    CheckRun "php artisan migrate:fresh" "Creating MySQL Tables"
+    printf "\n ${YELLOW} :: DATABASE Configed Successfully ::"
 }
 
 PrintLogo
