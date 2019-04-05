@@ -50,7 +50,7 @@ class ParkedCarsController extends Controller
     public function checkoutTicket($ticket_number){
         $responseMessages = ResponseMessages::checkoutTicket();
         $thisTicket = ParkedCars::where('ticket_number', '=', intval($ticket_number));
-        if($thisTicket->exists()){
+        if($thisTicket->exists() && $ticket_number != ''){
             $thisTicket = $thisTicket->first();
             return response()->json(
                 [ "car_status" => $thisTicket->car_status ] +
@@ -82,7 +82,7 @@ class ParkedCarsController extends Controller
         }
         $responseMessages = ResponseMessages::payForTicket();
         $thisTicket = ParkedCars::where('ticket_number', intval($ticket_number));
-        if($thisTicket->exists()){
+        if($thisTicket->exists() && $ticket_number != ''){
             if($thisTicket->first()->car_status != 'paid'){
                 $thisTicket->update([
                     "car_status" => 'paid',
