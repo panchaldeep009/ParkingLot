@@ -2,8 +2,6 @@
 
 namespace App;
 
-use App\ParkedCars;
-
 class TicketAmount {
     public static function countAmount ($unix_time_stamp, $current_unix_time_stamp) {
         $unix_duration = $current_unix_time_stamp - $unix_time_stamp;

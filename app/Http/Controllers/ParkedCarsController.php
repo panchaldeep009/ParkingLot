@@ -67,7 +67,7 @@ class ParkedCarsController extends Controller
         }
     }
 
-    /// GET/payments/{ticket_number}
+    /// POST/payments/{ticket_number}
 
     public function payForTicket($ticket_number, Request $request){
 
