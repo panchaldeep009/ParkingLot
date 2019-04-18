@@ -1,5 +1,6 @@
 # ParkingLot
-This is a REST API for A Parking Lot Application.
+This is A Car Parking Ticketing Application.
+This app creates a ticket for a limited number of cars and count fees based on hours of parking.
 
 ## Setup
 Following instructions will give a copy of this Parking Lot Application up and running in any local machine for testing purposes.
