@@ -33,7 +33,7 @@ Following apps should installed in machine in order to config this app.
   // config catch 
   docker-compose exec app php artisan config:cache
   // migrate database
-  docker-compose exec app php artisan config:cache
+  docker-compose exec app php artisan migrate --seed
   ```
 - Now you can run the app on [http://localhost:3000/](http://localhost:3000/) as per configured in `docker-compose.yml` file.
 ## Tests
