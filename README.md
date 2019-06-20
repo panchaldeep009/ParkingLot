@@ -9,33 +9,33 @@ Following instructions will give a copy of this Parking Lot Application up and r
 
 This app's back-end build with Laravel framework and font-end bundled with Node.
 Following apps should installed in machine in order to config this app.
-- [Bash](https://www.gnu.org/software/bash/).
-- [PHP](https://www.php.net/downloads.php).
-- [Composer CLI](https://getcomposer.org/download/).
-- [Node Package Manager CLI](https://nodejs.org/en/download/)
+- [Docker](https://docker.com/).
 
 ### Installing
 - Clone this App from the master branch,
-- Open Terminal/Bash and run following comands:
-  - To Config App:
-  ```
+- Config environment to run app in local machine by running following commands.
+  ```sh
+  // move to app dir
   cd <app cloned dir>
-  bash configApp --app
+  // Copy environment file 
+  cp .env.example .env
+  // 
   ```
-  - Config MySQL Connection
+- Build and Run virtual environments for app
+  ```sh
+  docker-compose up -d
   ```
-  bash configApp --sql
+  _Note: in case of mysql container build faild, run : `docker-compose restart`_
+- Setup Application key and Database migration
+  ```sh
+  // set app key
+  docker-compose exec app php artisan key:generate
+  // config catch 
+  docker-compose exec app php artisan config:cache
+  // migrate database
+  docker-compose exec app php artisan config:cache
   ```
-## Run
-  - To Run back-end server for App:
-  ```
-  cd <app cloned dir>
-  bash configApp --run
-  ```
-  - To Run front-end development watch:
-  ```
-  bash configApp --watch
-  ```
+- Now you can run the app on [http://localhost:3000/](http://localhost:3000/) as per configured in `docker-compose.yml` file.
 ## Tests
 
   - To Run API Test:
